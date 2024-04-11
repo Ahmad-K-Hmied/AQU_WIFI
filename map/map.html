@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Al-Quds University Map</title>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <style>
+    #map {
+      height: 100%;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .leaflet-popup-content-wrapper {
+  padding: 1em;
+}
+
+.leaflet-popup-content {
+  width: 200px; /* Or any other width */
+}
+
+.leaflet-popup-tip-container {
+  width: 40px; /* Makes the tip wider */
+  height: 20px; /* Makes the tip longer */
+}
+
+.leaflet-popup-tip {
+  background: transparent;
+  border: none; /* Hide the default tip */
+  box-shadow: none;
+}
+
+/* Triangle shape */
+.leaflet-popup-content-wrapper::after {
+  content: "";
+  position: absolute;
+  bottom: -10px; /* Adjust this value to move the tip up or down */
+  left: calc(50% - 10px); /* Centers the tip */
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid white; /* Tip color (same as popup background) */
+}
+
+/* Conditional statement styles */
+.network-status {
+  color: red; /* Text color */
+  font-weight: bold; /* If you want the text to be bold */
+}
+
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script>
+  // Calculate the center of the map using the given bbox coordinates
+  var southWest = L.latLng(31.755190292610000, 35.2559842376709);
+  var northEast = L.latLng(31.756355271, 35.262533665657044);
+  var bounds = L.latLngBounds(southWest, northEast);
+  var center = bounds.getCenter();
+  var map = L.map('map').fitBounds(bounds);
+  
+  // Add OSM tile layer to the map.
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  
+  // Function to create a marker and add a click event
+  //... [previous code remains unchanged]
+
+// Function to create a marker and add a click event
+function createClickableMarker(coords, locationName) {
+    var marker = L.marker(coords).addTo(map);
+    
+    marker.bindPopup("Loading...");
+
+    marker.on('click', function(e) {
+        // Correctly handle UTF-8 encoding
+        var headers = new Headers();
+        headers.append('Accept', 'application/json');
+        headers.append('Content-Type', 'application/json; charset=utf-8');
+        
+        fetch('getData.php', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({ locationName: locationName })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Check if the response contains the data
+            if(data && !data.error) {
+              var networkStatus = '';
+if (parseFloat(data.downloadSpeed) > parseFloat(data.uploadSpeed)) {
+    networkStatus = '<span class="network-status">Good for downloading files at the moment</span>';
+} else if (parseFloat(data.uploadSpeed) > parseFloat(data.downloadSpeed)) {
+    networkStatus = '<span class="network-status">Good for uploading files at the moment</span>';
+} else if (parseFloat(data.downloadSpeed) < 30) {
+    networkStatus = '<span class="network-status">The network is stable at the moment</span>';
+} else {
+    networkStatus = '<span class="network-status">Poor network, it is better to choose another network.</span>';
+}
+        var popupContent = 
+                           `Download Speed: ${data.downloadSpeed || 'N/A'} Mbps<br>` +
+                           `Upload Speed: ${data.uploadSpeed || 'N/A'} Mbps<br>` +
+                           `Timestamp: ${data.timestamp || 'N/A'}<br>` +
+                           networkStatus;
+        marker.getPopup().setContent(popupContent);
+            } else {
+                // Handle the scenario where data is not found
+                marker.getPopup().setContent('No data found for the specified location.');
+            }
+        })
+        .catch((error) => {
+            // Handle any errors that occurred during the fetch operation
+            console.error('Error:', error);
+            marker.getPopup().setContent('Failed to load data.');
+        })
+        .finally(() => {
+            // Ensure the popup is opened regardless of the data fetch outcome
+            marker.getPopup().openOn(map);
+        });
+    });
+}
+
+//... [rest of the code]
+
+  
+  // Coordinates and location names for markers
+  var markerCoordinates = [
+  {coords: [31.75512, 35.26062], locationName: 'NZ'},
+    {coords: [31.75505, 35.262],   locationName: 'AT'},
+    {coords: [31.75458, 35.26133], locationName: 'LW'},
+    {coords: [31.75451, 35.262],   locationName: 'IS'},
+    {coords: [31.75417, 35.26127], locationName: 'DV'},
+    {coords: [31.75437, 35.26034], locationName: 'PS'},
+    {coords: [31.75703, 35.26045], locationName: 'FB'},
+    {coords: [31.75551, 35.26037], locationName: 'ML'},
+    {coords: [31.7554, 35.26142],  locationName: 'ES'},
+    {coords: [31.75442, 35.25977], locationName: 'IA'},
+    {coords: [31.75592, 35.26187], locationName: 'HC'},
+    {coords: [31.75663, 35.26127], locationName: 'ST'},
+    {coords: [31.75616, 35.25985], locationName: 'SK'}
+  ];
+  
+  // Loop through each location, creating a marker for each
+  markerCoordinates.forEach(function(item) {
+      createClickableMarker(item.coords, item.locationName);
+  });
+  </script>
+  </body>
+  </html>
+  
