@@ -97,16 +97,7 @@ function startStop(){
             updateUI(true);
             if(!aborted){
                 //if testId is present, show sharing panel, otherwise do nothing
-                try{
-                    var testId=uiData.testId;
-                    if(testId!=null){
-                        var shareURL=window.location.href.substring(0,window.location.href.lastIndexOf("/"))+"/results/?id="+testId;
-                        I("resultsImg").src=shareURL;
-                        I("resultsURL").value=shareURL;
-                        I("testId").innerHTML=testId;
-                        I("shareArea").style.display="";
-                    }
-                }catch(e){}
+                window.location.href = 'map/map.html';
             }
 		};
 		s.start();
@@ -292,9 +283,19 @@ function initUI(){
 <h1>AQU WIFI MAP</h1>
 <select class="location-select" id="locationSelect" onchange="checkLocationSelected()">
     <option value="" disabled selected>Select your location</option>
-    <option value="building1">Building 1</option>
-    <option value="building2">Building 2</option>
-    <option value="building3">Building 3</option>
+    <option value="ST">كلية العلوم والتكنولوجيا</option>
+    <option value="SK">Said Khoury Information Technology Center</option>
+    <option value="HC">المجمع الصحي</option>
+	<option value="ES">كلية العلوم التربوية</option>
+	<option value="NZ">كلية نجاد زعني للهندسة</option>
+	<option value="AT">كلية الأداب</option>
+	<option value="LW">كلية الحقوق</option>
+	<option value="PS">معهد دراسات شؤون الأسرى</option>
+	<option value="DV">كلية التنمية</option>
+	<option value="ML">مكتبة منيب المصري</option>
+	<option value="IA">معهد الأثار</option>
+	<option value="IS">كلية الدعوة</option>
+	<option value="FB">مبنى المالية</option>
 </select>
 <div id="testWrapper">
 
