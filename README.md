@@ -59,6 +59,6 @@ Ahmad Hmied
 
 📧 ahmadkhmied@gmail.com
 
-🌍 Tuqu', Bethlehem, Palestine
+🌍 Bethlehem, Palestine
 
 
