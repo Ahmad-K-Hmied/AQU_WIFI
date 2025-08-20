@@ -57,7 +57,6 @@ This project is open source and free for any one to use.
 ## 🙋‍♂️ Author
 Ahmad Hmied
 
-📧 ahmadkhmied@gmail.com
 
 🌍 Bethlehem, Palestine
 
