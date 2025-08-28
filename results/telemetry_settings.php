@@ -22,10 +22,10 @@ $MsSql_TrustServerCertificate = true;  #true, false or comment out for driver de
 #Download driver from https://docs.microsoft.com/en-us/sql/connect/php/download-drivers-php-sql-server?view=sql-server-ver16
 
 // Mysql settings
-$MySql_username = 'aa5c4e_ahmad';
-$MySql_password = '0569TEMP@temp';
-$MySql_hostname = 'MYSQL9001.site4now.net';
-$MySql_databasename = 'db_aa5c4e_ahmad';
+$MySql_username = '';
+$MySql_password = '';
+$MySql_hostname = '';
+$MySql_databasename = '';
 $MySql_port = '3306';
 
 // Postgresql settings
